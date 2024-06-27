@@ -7,7 +7,7 @@ User=root
 Group=root
 WorkingDirectory=/root/sqlinjection
 Environment="PATH=/root/sqlinjection/.venv/bin"
-ExecStart=/root/.venv/sqlinjection/bin/gunicorn --workers 1 --bind 0.0.0.0:1969 main:app
+ExecStart=/root/sqlinjection/.venv/bin/gunicorn --workers 1 --bind 0.0.0.0:1969 main:app
 ExecReload=/bin/kill -s HUP $MAINPID
 KillMode=mixed
 TimeoutStopSec=5
