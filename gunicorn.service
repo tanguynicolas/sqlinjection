@@ -6,7 +6,7 @@ After=network.target
 User=root
 Group=root
 WorkingDirectory=/root/sqlinjection
-Environment="PATH=/root/sqlinjection/.venv/bin"
+Environment="PATH=/root/sqlinjection/.venv/bin/activate"
 ExecStart=/root/sqlinjection/.venv/bin/gunicorn --workers 1 --bind 0.0.0.0:1969 main:app
 ExecReload=/bin/kill -s HUP $MAINPID
 KillMode=mixed
