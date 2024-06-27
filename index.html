@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Victime Management</title>
+    <style>
+        /* Style général du tableau */
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 20px;
+        }
+
+        /* Style de l'en-tête du tableau */
+        th {
+          background-color: #ff825f;
+          text-align: left;
+          padding: 8px;
+          font-weight: bold;
+          border-bottom: 1px solid #ddd;
+        }
+
+        /* Style des cellules du tableau */
+        td {
+          padding: 8px;
+          border-bottom: 1px solid #fff0f0;
+        }
+
+        /* Style des lignes impaires pour une meilleure lisibilité */
+        tr:nth-child(odd) {
+          background-color: #ffdbdb;
+        }
+
+        td:first-child {
+          text-align: center;
+        }
+
+        td:last-child {
+          text-align: center;
+        }
+
+        td a {
+          color: blue;
+          text-decoration: underline;
+        }
+
+        tr:hover {
+          background-color: #ff7979;
+        }
+
+        h1 {
+          text-align: center;
+          background-image: linear-gradient(to left, #380000, #ff0a0a);
+          color: transparent;
+          background-clip: text;
+          -webkit-background-clip: text;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gestion des victimes</h1>
+
+    <h2>Ajouter un victime</h2>
+    <form id="addForm">
+        <label for="prenom">Prénom :</label>
+        <input type="text" id="prenom" name="prenom" required><br><br>
+        <label for="nom">Nom :</label>
+        <input type="text" id="nom" name="nom" required><br><br>
+        <label for="email">Email :</label>
+        <input type="email" id="email" name="email" required><br><br>
+        <label for="rancon">Rançon (BTC) :</label>
+        <input type="int" id="rancon" name="rancon"><br><br>
+        <button type="submit">Ajouter</button>
+    </form>
+    <p id="message"></p>
+
+    <h2>Rechercher des victimes par email</h2>
+    <form id="searchForm">
+        <label for="search_email">Email :</label>
+        <input type="text" id="search_email" name="search_email">
+        <button type="submit">Rechercher</button>
+    </form>
+    <div id="search_results">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                    <th>Rançon</th>
+                </tr>
+            </thead>
+            <tbody id="results_table">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.getElementById('addForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            fetch('/add_employee', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('message').textContent = data.message;
+                this.reset();
+            });
+        });
+
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            fetch('/search_employee', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultsTable = document.getElementById('results_table');
+                resultsTable.innerHTML = '';
+                data.employees.forEach(employee => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td>${employee.nom}</td><td>${employee.prenom}</td><td>${employee.email}</td><td>${employee.rancon}</td>`;
+                    resultsTable.appendChild(row);
+                });
+            });
+        });
+    </script>
+
+    <!-- Salut ça va ? -->
+
+</body>
+</html>
